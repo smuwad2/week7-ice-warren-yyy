@@ -1,8 +1,37 @@
 <script>
+    import axios from 'axios';
     export default { 
-
-       // add code here
-
+        data() {
+            return {
+                moods: ['Happy', 'Sad', 'Angry'],
+                subject: "",
+                entry: '',
+                selMood: ''
+            }
+        },
+        methods: {
+            async addPost() {
+                try {
+                    await axios.get(`${this.baseUrl}/addPost`, { params: {
+                        'subject': this.subject,
+                        'entry': this.entry,
+                        'mood': this.selMood
+                    }})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        },
+        computed: {
+            baseUrl() {
+                if (window.location.hostname=='localhost')
+                    return 'http://localhost:3000' 
+                else {
+                    const codespace_host = window.location.hostname.replace('5173', '3000')
+                    return `https://${codespace_host}`;
+                }
+            }
+        },
     }
 </script>
 
@@ -19,14 +48,20 @@
 
         Mood:
         <!-- TODO: Build a dropdown list here for selecting the mood -->
-
+        <select v-model="selMood">
+            <option v-for="mood in moods">
+                {{ mood }}
+            </option>
+        </select>
         <br>
 
         <br>
-        <button>Submit New Post</button>
+        <button @click="addPost">Submit New Post</button>
 
-        <hr> Click  <a><router-link to="/ViewPosts/">here</router-link></a>  to return to Main Page
+        <hr> Click  <router-link to="/ViewPosts/">here</router-link>  to return to Main Page
        
     </div>
 </template>
+
+
 
