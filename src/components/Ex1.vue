@@ -28,11 +28,11 @@
 </script>
 
 <template>
-    <p>x <input v-model.number="x"></p>
+    <p>x <input v-model.number="x" type="number"></p>
     <select v-model="selectedOp">
         <option v-for="op in operators" >{{ op }}</option>
     </select>
-    <p>y <input v-model.number="y"></p>
+    <p>y <input v-model.number="y" type="number"></p>
     
     <p>---------------------</p>
 
