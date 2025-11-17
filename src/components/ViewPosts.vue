@@ -25,7 +25,7 @@ export default {
         }
     },
     created() { // created is a hook that executes as soon as Vue instance is created
-        axios.get(`${this.baseUrl}/posts`)
+        axios.get('http://localhost/WAD2/week10/blog/getPosts')
             .then(response => {
                 // this gets the data, which is an array, and pass the data to Vue instance's posts property
                 this.posts = response.data
@@ -36,10 +36,25 @@ export default {
     },
     methods: {
         editPost(id) {
-            
+            const p = this.posts.find(x => x.id === id)
+            if (!p) return
+            this.editPostId = id
+            this.entry = p.entry
+            this.mood  = p.mood
+            this.showEditPost = true
         },
         updatePost(event) {
-            
+            axios.post('http://localhost/WAD2/week10/blog/updatePost',{entry:this.entry,mood:this.mood},{params:{id:this.editPostId}})
+            .then(response=>{
+
+                this.posts[this.posts.length-Number(event)]['entry']=this.entry
+                this.posts[this.posts.length-Number(event)]['mood']=this.mood
+                console.log(response)
+                this.showEditPost= false            
+            })
+            .catch(error=>{
+                console.log(error)
+            })
         }
     }
 }
@@ -61,7 +76,7 @@ export default {
                     <td>{{ post.id }}</td>
                     <td>{{ post.entry }}</td>
                     <td>{{ post.mood }}</td>
-                    <td><button>Edit</button></td>
+                    <td><button @click="editPost(post.id)">Edit</button></td>
                 </tr>
             </tbody>
 
@@ -82,7 +97,7 @@ export default {
                             <option v-for="mood in moods" :value="mood">{{ mood }}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update Post</button>
+                    <button @click.prevent="updatePost(editPostId)" type="submit" class="btn btn-primary">Update Post</button>
                 </form>
             </div>
         </div>

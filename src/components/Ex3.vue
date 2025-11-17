@@ -12,26 +12,16 @@
         methods: {
             async addPost() {
                 try {
-                    await axios.get(`${this.baseUrl}/addPost`, { params: {
+                    await axios.get('http://localhost/WAD2/week10/blog/addPost.php', { params: {
                         'subject': this.subject,
                         'entry': this.entry,
                         'mood': this.selMood
-                    }})
+                    }});
                 } catch (error) {
-                    console.log(error)
+                    console.log(error);
                 }
             }
-        },
-        computed: {
-            baseUrl() {
-                if (window.location.hostname=='localhost')
-                    return 'http://localhost:3000' 
-                else {
-                    const codespace_host = window.location.hostname.replace('5173', '3000')
-                    return `https://${codespace_host}`;
-                }
-            }
-        },
+        }
     }
 </script>
 
